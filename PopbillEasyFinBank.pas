@@ -3,17 +3,28 @@ unit PopbillEasyFinBank;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs;
-
+  TypInfo,SysUtils,Classes,Popbill,Linkhub;
 type
-  private
-    { Private declarations }
-  public
-    { Public declarations }
-  end;
+        TEasyFinBankChargeInfo = class
+        public
+                unitCost        : string;
+                chargeMethod    : string;
+                rateSystem      : string;
+        end;
 
-var
+        TEasyFinBankService = class(TPopbillBaseService)
+        private
+
+        public
+                constructor Create(LinkID : String; SecretKey : String);
+        end;
 
 implementation
+
+constructor TEasyFinBankService.Create(LinkID : String; SecretKey : String);
+begin
+       inherited Create(LinkID,SecretKey);
+       AddScope('180');
+end;
 
 end.
