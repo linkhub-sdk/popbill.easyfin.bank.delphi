@@ -716,6 +716,7 @@ begin
                         begin
                                 result.list[i] := TEasyFinBankSearchDetail.Create;
                                 result.list[i].tid := getJsonString (jSons[i], 'tid');
+                                result.list[i].trdt := getJsonString (jSons[i], 'trdt');
                                 result.list[i].trdate := getJsonString (jSons[i], 'trdate');
                                 result.list[i].trserial := getJsonInteger (jSons[i], 'trserial');
                                 result.list[i].accIn := getJsonString (jSons[i], 'accIn');
