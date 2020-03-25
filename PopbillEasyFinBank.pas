@@ -81,6 +81,7 @@ type
                 pageNum         : Integer;
                 pageCount       : Integer;
                 message         : String;
+                lastScrapDT     : String;
                 list            : TEasyFinBankSearchDetailList;
         end;
 
@@ -708,6 +709,7 @@ begin
                 result.pageNum := getJSonInteger(responseJson, 'pageNum');
                 result.pageCount := getJSonInteger(responseJson, 'pageCount');
                 result.message := getJSonString(responseJson, 'message');
+                result.lastScrapDT := getJSonString(responseJson, 'lastScrapDT');
 
                 try
                         jSons := getJsonList(responseJson, 'list');
