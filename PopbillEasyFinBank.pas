@@ -45,6 +45,19 @@ type
                 unPaidYN        : boolean;
         end;
 
+        TEasyFinBankAccountForm = Record
+                BankCode : string;
+                AccountNumber : string;
+                AccountPWD : string;
+                AccountType : string;
+                IdentityNumber : string;
+                AccountName : string;
+                BankID : string;
+                FastID : string;
+                FastPWD : string;
+                Memo : string;
+        end;
+
         TEasyFinBankAccountInfoList = Array Of TEasyFinBankAccountInfo;
 
         TEasyFinBankJobInfo = class
@@ -147,6 +160,9 @@ type
                 // 거래내역 메모 저장
                 function SaveMemo(CorpNum:string; TID:String; Memo:string; UserID: string = '') : TResponse;
 
+                // 계좌등록
+                function RegistBankAccount(CorpNum : String; BankInfo : TEasyFinBankAccountForm; UsePeriod: String; UserID : String = '') : TResponse; overload;
+
         end;
 implementation
 
@@ -154,6 +170,61 @@ constructor TEasyFinBankService.Create(LinkID : String; SecretKey : String);
 begin
        inherited Create(LinkID,SecretKey);
        AddScope('180');
+end;
+
+function TEasyFinBankService.RegistBankAccount(CorpNum : String; BankInfo : TEasyFinBankAccountForm; UsePeriod: String; UserID : String = '') : TResponse;
+var
+        requestJson : string;
+        responseJson : string;
+        uri : string;
+begin
+        try
+                requestJson := '{';
+                requestJson := requestJson + '"BankCode":"'+EscapeString(BankInfo.BankCode)+'",';
+                requestJson := requestJson + '"AccountPWD":"'+EscapeString(BankInfo.AccountPWD)+'",';
+                requestJson := requestJson + '"AccountType":"'+EscapeString(BankInfo.AccountType)+'",';
+                requestJson := requestJson + '"IdentityNumber":"'+EscapeString(BankInfo.IdentityNumber)+'",';
+                requestJson := requestJson + '"AccountName":"'+EscapeString(BankInfo.AccountName)+'",';
+                requestJson := requestJson + '"BankID":"'+EscapeString(BankInfo.BankID)+'",';
+                requestJson := requestJson + '"FastID":"'+EscapeString(BankInfo.FastID)+'",';
+                requestJson := requestJson + '"FastPWD":"'+EscapeString(BankInfo.FastPWD)+'",';
+                requestJson := requestJson + '"Memo":"'+EscapeString(BankInfo.Memo)+'",';
+                requestJson := requestJson + '"AccountNumber":"'+EscapeString(BankInfo.AccountNumber)+'"';
+                requestJson := requestJson + '}';
+
+                uri := '/EasyFin/Bank/BankAccount/Regist';
+
+                if UsePeriod <> '' then
+                begin
+                        uri := uri + '?UsePeriod='+UsePeriod;
+                end;
+
+                responseJson := httppost(uri, CorpNum, UserID, requestJson);
+
+                if LastErrCode <> 0 then
+                begin
+                        result.code := LastErrCode;
+                        result.message := LastErrMessage;
+                end
+                else
+                begin
+                        result.code := getJSonInteger(responseJson,'code');
+                        result.message := getJSonString(responseJson,'message');
+                end;
+        except
+                on le : EPopbillException do begin
+                        if FIsThrowException then
+                        begin
+                                raise EPopbillException.Create(le.code,le.Message);
+                        end
+                        else
+                        begin
+                                result.code := le.code;
+                                result.Message := le.Message;
+                        end;
+                end;
+        end;
+
 end;
 
 function TEasyFinBankService.GetChargeInfo (CorpNum : string) : TEasyFinBankChargeInfo;
