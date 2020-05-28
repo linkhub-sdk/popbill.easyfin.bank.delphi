@@ -34,6 +34,15 @@ type
                 state       : Integer;
                 regDT     : String;
                 memo      : String;
+                
+                contractDt      : string;
+                baseDate        : Integer;
+                useEndDate      : string;
+                contractState           : Integer;
+                closeRequestYN  : boolean;
+                useRestrictYN   : boolean;
+                closeOnExpired  : boolean;
+                unPaidYN        : boolean;
         end;
 
         TEasyFinBankAccountInfoList = Array Of TEasyFinBankAccountInfo;
@@ -306,6 +315,16 @@ begin
         result.accountType := getJsonString(json, 'accountType');
         result.regDT := getJsonString(json, 'regDT');
         result.memo := getJsonString(json, 'memo');
+        result.contractDT := getJsonString(json, 'contractDT');
+        result.baseDate := getJsonInteger(json, 'baseDate');
+        result.useEndDate := getJsonString(json, 'useEndDate');
+        result.contractState := getJsonInteger(json, 'contractState');
+        
+        result.closeRequestYN := getJsonBoolean(json, 'closeRequestYN');
+        result.useRestrictYN := getJsonBoolean(json, 'useRestrictYN');
+        result.closeOnExpired := getJsonBoolean(json, 'closeOnExpired');
+        result.unPaidYN := getJsonBoolean(json, 'unPaidYN');
+
 end;
 
 function TEasyFinBankService.ListBankAccount (CorpNum : string; UserID:string) : TEasyFinBankAccountInfoList;
