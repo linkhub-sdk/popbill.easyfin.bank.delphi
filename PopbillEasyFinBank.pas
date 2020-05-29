@@ -38,7 +38,7 @@ type
                 contractDt      : string;
                 baseDate        : Integer;
                 useEndDate      : string;
-                contractState           : Integer;
+                contractState   : Integer;
                 closeRequestYN  : boolean;
                 useRestrictYN   : boolean;
                 closeOnExpired  : boolean;
@@ -164,7 +164,10 @@ type
                 function RegistBankAccount(CorpNum : String; BankInfo : TEasyFinBankAccountForm; UsePeriod: String; UserID : String = '') : TResponse; 
 
                 // °èÁÂ¼öÁ¤
-                function UpdateBankAccount(CorpNum : String; BankInfo : TEasyFinBankAccountForm; UserID : String = '') : TResponse; 
+                function UpdateBankAccount(CorpNum : String; BankInfo : TEasyFinBankAccountForm; UserID : String = '') : TResponse;
+
+                // °èÁÂÁ¤º¸ Á¶È¸
+                function GetBankAccountInfo(CorpNum : String; BankCode:String; AccountNumber:String; UserID : String = '') : TEasyFinBankAccountInfo;                 
 
         end;
 implementation
@@ -444,6 +447,20 @@ begin
         result.unPaidYN := getJsonBoolean(json, 'unPaidYN');
 
 end;
+
+
+
+function TEasyFinBankService.GetBankAccountInfo(CorpNum : String; BankCode:String; AccountNumber:String; UserID : String = '') : TEasyFinBankAccountInfo;
+var
+        responseJson : string;
+begin
+
+        responseJson := httpget('/EasyFin/Bank/BankAccount/'+BankCode+'/'+AccountNumber, CorpNum, UserID);
+
+        result :=  jsonToTEasyFinBankAccountInfo(responseJson);
+
+end;
+
 
 function TEasyFinBankService.ListBankAccount (CorpNum : string; UserID:string) : TEasyFinBankAccountInfoList;
 var
