@@ -161,7 +161,10 @@ type
                 function SaveMemo(CorpNum:string; TID:String; Memo:string; UserID: string = '') : TResponse;
 
                 // °èÁÂµî·Ï
-                function RegistBankAccount(CorpNum : String; BankInfo : TEasyFinBankAccountForm; UsePeriod: String; UserID : String = '') : TResponse; overload;
+                function RegistBankAccount(CorpNum : String; BankInfo : TEasyFinBankAccountForm; UsePeriod: String; UserID : String = '') : TResponse; 
+
+                // °èÁÂ¼öÁ¤
+                function UpdateBankAccount(CorpNum : String; BankInfo : TEasyFinBankAccountForm; UserID : String = '') : TResponse; 
 
         end;
 implementation
@@ -224,7 +227,51 @@ begin
                         end;
                 end;
         end;
+end;
 
+function TEasyFinBankService.UpdateBankAccount(CorpNum : String; BankInfo : TEasyFinBankAccountForm; UserID : String = '') : TResponse;
+var
+        requestJson : string;
+        responseJson : string;
+        uri : string;
+begin
+        try
+                requestJson := '{';
+                requestJson := requestJson + '"AccountPWD":"'+EscapeString(BankInfo.AccountPWD)+'",';
+                requestJson := requestJson + '"AccountName":"'+EscapeString(BankInfo.AccountName)+'",';
+                requestJson := requestJson + '"BankID":"'+EscapeString(BankInfo.BankID)+'",';
+                requestJson := requestJson + '"FastID":"'+EscapeString(BankInfo.FastID)+'",';
+                requestJson := requestJson + '"FastPWD":"'+EscapeString(BankInfo.FastPWD)+'",';
+                requestJson := requestJson + '"Memo":"'+EscapeString(BankInfo.Memo)+'"';
+                requestJson := requestJson + '}';
+
+                uri := '/EasyFin/Bank/BankAccount/'+BankInfo.BankCode+'/'+BankInfo.AccountNumber+'/Update';
+
+                responseJson := httppost(uri, CorpNum, UserID, requestJson);
+
+                if LastErrCode <> 0 then
+                begin
+                        result.code := LastErrCode;
+                        result.message := LastErrMessage;
+                end
+                else
+                begin
+                        result.code := getJSonInteger(responseJson,'code');
+                        result.message := getJSonString(responseJson,'message');
+                end;
+        except
+                on le : EPopbillException do begin
+                        if FIsThrowException then
+                        begin
+                                raise EPopbillException.Create(le.code,le.Message);
+                        end
+                        else
+                        begin
+                                result.code := le.code;
+                                result.Message := le.Message;
+                        end;
+                end;
+        end;
 end;
 
 function TEasyFinBankService.GetChargeInfo (CorpNum : string) : TEasyFinBankChargeInfo;
