@@ -175,6 +175,9 @@ type
                 // 정액제 해지신청 취소
                 function RevokeCloseBankAccountInfo(CorpNum : String; BankCode:String; AccountNumber:String; UserID : String = '') : TResponse;
 
+                // 종량제 계좌삭제
+                function DeleteBankAccount(CorpNum : String; BankInfo : TEasyFinBankAccountForm; UserID : String = '') : TResponse;
+
         end;
 implementation
 
@@ -304,6 +307,47 @@ begin
                 uri := '/EasyFin/Bank/BankAccount/Close?BankCode='+BankCode+'&&AccountNumber='+AccountNumber+'&&CloseType='+UrlEncodeUTF8(CloseType);
 
                 responseJson := httppost(uri, CorpNum, UserID, '');
+
+                if LastErrCode <> 0 then
+                begin
+                        result.code := LastErrCode;
+                        result.message := LastErrMessage;
+                end
+                else
+                begin
+                        result.code := getJSonInteger(responseJson,'code');
+                        result.message := getJSonString(responseJson,'message');
+                end;
+        except
+                on le : EPopbillException do begin
+                        if FIsThrowException then
+                        begin
+                                raise EPopbillException.Create(le.code,le.Message);
+                        end
+                        else
+                        begin
+                                result.code := le.code;
+                                result.Message := le.Message;
+                        end;
+                end;
+        end;
+end;
+
+function TEasyFinBankService.DeleteBankAccount(CorpNum : String; BankInfo : TEasyFinBankAccountForm; UserID : String = '') : TResponse;
+var
+        requestJson : string;
+        responseJson : string;
+        uri : string;
+begin
+        try
+                requestJson := '{';
+                requestJson := requestJson + '"BankCode":"'+EscapeString(BankInfo.BankCode)+'",';
+                requestJson := requestJson + '"AccountNumber":"'+EscapeString(BankInfo.AccountNumber)+'"';
+                requestJson := requestJson + '}';
+
+                uri := '/EasyFin/Bank/BankAccount/Delete';
+
+                responseJson := httppost(uri, CorpNum, UserID, requestJson);
 
                 if LastErrCode <> 0 then
                 begin
