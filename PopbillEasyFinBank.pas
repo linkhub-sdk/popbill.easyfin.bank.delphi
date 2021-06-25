@@ -176,7 +176,7 @@ type
                 function RevokeCloseBankAccountInfo(CorpNum : String; BankCode:String; AccountNumber:String; UserID : String = '') : TResponse;
 
                 // 종량제 계좌삭제
-                function DeleteBankAccount(CorpNum : String; BankInfo : TEasyFinBankAccountForm; UserID : String = '') : TResponse;
+                function DeleteBankAccount(CorpNum : String; BankCode:String; AccountNumber:String; UserID : String = '') : TResponse;
 
         end;
 implementation
@@ -333,7 +333,7 @@ begin
         end;
 end;
 
-function TEasyFinBankService.DeleteBankAccount(CorpNum : String; BankInfo : TEasyFinBankAccountForm; UserID : String = '') : TResponse;
+function TEasyFinBankService.DeleteBankAccount(CorpNum : String; BankCode : String; AccountNumber : String; UserID : String = '') : TResponse;
 var
         requestJson : string;
         responseJson : string;
@@ -341,8 +341,8 @@ var
 begin
         try
                 requestJson := '{';
-                requestJson := requestJson + '"BankCode":"'+EscapeString(BankInfo.BankCode)+'",';
-                requestJson := requestJson + '"AccountNumber":"'+EscapeString(BankInfo.AccountNumber)+'"';
+                requestJson := requestJson + '"BankCode":"'+EscapeString(BankCode)+'",';
+                requestJson := requestJson + '"AccountNumber":"'+EscapeString(AccountNumber)+'"';
                 requestJson := requestJson + '}';
 
                 uri := '/EasyFin/Bank/BankAccount/Delete';
