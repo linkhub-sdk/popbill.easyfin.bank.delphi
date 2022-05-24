@@ -267,34 +267,13 @@ var
         responseJson : string;
         uri : string;
 begin
-        try
-                uri := '/EasyFin/Bank/BankAccount/RevokeClose?BankCode='+BankCode+'&&AccountNumber='+AccountNumber;
 
-                responseJson := httppost(uri, CorpNum, UserID, '');
+        uri := '/EasyFin/Bank/BankAccount/RevokeClose?BankCode='+BankCode+'&&AccountNumber='+AccountNumber;
 
-                if LastErrCode <> 0 then
-                begin
-                        result.code := LastErrCode;
-                        result.message := LastErrMessage;
-                end
-                else
-                begin
-                        result.code := getJSonInteger(responseJson,'code');
-                        result.message := getJSonString(responseJson,'message');
-                end;
-        except
-                on le : EPopbillException do begin
-                        if FIsThrowException then
-                        begin
-                                raise EPopbillException.Create(le.code,le.Message);
-                        end
-                        else
-                        begin
-                                result.code := le.code;
-                                result.Message := le.Message;
-                        end;
-                end;
-        end;
+        responseJson := httppost(uri, CorpNum, UserID, '');
+
+        result.code := getJSonInteger(responseJson,'code');
+        result.message := getJSonString(responseJson,'message');
 end;
 
 
@@ -303,34 +282,12 @@ var
         responseJson : string;
         uri : string;
 begin
-        try
-                uri := '/EasyFin/Bank/BankAccount/Close?BankCode='+BankCode+'&&AccountNumber='+AccountNumber+'&&CloseType='+UrlEncodeUTF8(CloseType);
+        uri := '/EasyFin/Bank/BankAccount/Close?BankCode='+BankCode+'&&AccountNumber='+AccountNumber+'&&CloseType='+UrlEncodeUTF8(CloseType);
 
-                responseJson := httppost(uri, CorpNum, UserID, '');
+        responseJson := httppost(uri, CorpNum, UserID, '');
 
-                if LastErrCode <> 0 then
-                begin
-                        result.code := LastErrCode;
-                        result.message := LastErrMessage;
-                end
-                else
-                begin
-                        result.code := getJSonInteger(responseJson,'code');
-                        result.message := getJSonString(responseJson,'message');
-                end;
-        except
-                on le : EPopbillException do begin
-                        if FIsThrowException then
-                        begin
-                                raise EPopbillException.Create(le.code,le.Message);
-                        end
-                        else
-                        begin
-                                result.code := le.code;
-                                result.Message := le.Message;
-                        end;
-                end;
-        end;
+        result.code := getJSonInteger(responseJson,'code');
+        result.message := getJSonString(responseJson,'message');
 end;
 
 function TEasyFinBankService.DeleteBankAccount(CorpNum : String; BankCode : String; AccountNumber : String; UserID : String = '') : TResponse;
@@ -339,39 +296,18 @@ var
         responseJson : string;
         uri : string;
 begin
-        try
-                requestJson := '{';
-                requestJson := requestJson + '"BankCode":"'+EscapeString(BankCode)+'",';
-                requestJson := requestJson + '"AccountNumber":"'+EscapeString(AccountNumber)+'"';
-                requestJson := requestJson + '}';
 
-                uri := '/EasyFin/Bank/BankAccount/Delete';
+        requestJson := '{';
+        requestJson := requestJson + '"BankCode":"'+EscapeString(BankCode)+'",';
+        requestJson := requestJson + '"AccountNumber":"'+EscapeString(AccountNumber)+'"';
+        requestJson := requestJson + '}';
 
-                responseJson := httppost(uri, CorpNum, UserID, requestJson);
+        uri := '/EasyFin/Bank/BankAccount/Delete';
 
-                if LastErrCode <> 0 then
-                begin
-                        result.code := LastErrCode;
-                        result.message := LastErrMessage;
-                end
-                else
-                begin
-                        result.code := getJSonInteger(responseJson,'code');
-                        result.message := getJSonString(responseJson,'message');
-                end;
-        except
-                on le : EPopbillException do begin
-                        if FIsThrowException then
-                        begin
-                                raise EPopbillException.Create(le.code,le.Message);
-                        end
-                        else
-                        begin
-                                result.code := le.code;
-                                result.Message := le.Message;
-                        end;
-                end;
-        end;
+        responseJson := httppost(uri, CorpNum, UserID, requestJson);
+
+        result.code := getJSonInteger(responseJson,'code');
+        result.message := getJSonString(responseJson,'message');
 end;
 
 function TEasyFinBankService.RegistBankAccount(CorpNum : String; BankInfo : TEasyFinBankAccountForm; UsePeriod: String; UserID : String = '') : TResponse;
@@ -380,52 +316,30 @@ var
         responseJson : string;
         uri : string;
 begin
-        try
-                requestJson := '{';
-                requestJson := requestJson + '"BankCode":"'+EscapeString(BankInfo.BankCode)+'",';
-                requestJson := requestJson + '"AccountPWD":"'+EscapeString(BankInfo.AccountPWD)+'",';
-                requestJson := requestJson + '"AccountType":"'+EscapeString(BankInfo.AccountType)+'",';
-                requestJson := requestJson + '"IdentityNumber":"'+EscapeString(BankInfo.IdentityNumber)+'",';
-                requestJson := requestJson + '"AccountName":"'+EscapeString(BankInfo.AccountName)+'",';
-                requestJson := requestJson + '"BankID":"'+EscapeString(BankInfo.BankID)+'",';
-                requestJson := requestJson + '"FastID":"'+EscapeString(BankInfo.FastID)+'",';
-                requestJson := requestJson + '"FastPWD":"'+EscapeString(BankInfo.FastPWD)+'",';
-                requestJson := requestJson + '"Memo":"'+EscapeString(BankInfo.Memo)+'",';
-                requestJson := requestJson + '"AccountNumber":"'+EscapeString(BankInfo.AccountNumber)+'"';
-                requestJson := requestJson + '}';
+        requestJson := '{';
+        requestJson := requestJson + '"BankCode":"'+EscapeString(BankInfo.BankCode)+'",';
+        requestJson := requestJson + '"AccountPWD":"'+EscapeString(BankInfo.AccountPWD)+'",';
+        requestJson := requestJson + '"AccountType":"'+EscapeString(BankInfo.AccountType)+'",';
+        requestJson := requestJson + '"IdentityNumber":"'+EscapeString(BankInfo.IdentityNumber)+'",';
+        requestJson := requestJson + '"AccountName":"'+EscapeString(BankInfo.AccountName)+'",';
+        requestJson := requestJson + '"BankID":"'+EscapeString(BankInfo.BankID)+'",';
+        requestJson := requestJson + '"FastID":"'+EscapeString(BankInfo.FastID)+'",';
+        requestJson := requestJson + '"FastPWD":"'+EscapeString(BankInfo.FastPWD)+'",';
+        requestJson := requestJson + '"Memo":"'+EscapeString(BankInfo.Memo)+'",';
+        requestJson := requestJson + '"AccountNumber":"'+EscapeString(BankInfo.AccountNumber)+'"';
+        requestJson := requestJson + '}';
 
-                uri := '/EasyFin/Bank/BankAccount/Regist';
+        uri := '/EasyFin/Bank/BankAccount/Regist';
 
-                if UsePeriod <> '' then
-                begin
-                        uri := uri + '?UsePeriod='+UsePeriod;
-                end;
-
-                responseJson := httppost(uri, CorpNum, UserID, requestJson);
-
-                if LastErrCode <> 0 then
-                begin
-                        result.code := LastErrCode;
-                        result.message := LastErrMessage;
-                end
-                else
-                begin
-                        result.code := getJSonInteger(responseJson,'code');
-                        result.message := getJSonString(responseJson,'message');
-                end;
-        except
-                on le : EPopbillException do begin
-                        if FIsThrowException then
-                        begin
-                                raise EPopbillException.Create(le.code,le.Message);
-                        end
-                        else
-                        begin
-                                result.code := le.code;
-                                result.Message := le.Message;
-                        end;
-                end;
+        if UsePeriod <> '' then
+        begin
+                uri := uri + '?UsePeriod='+UsePeriod;
         end;
+
+        responseJson := httppost(uri, CorpNum, UserID, requestJson);
+
+        result.code := getJSonInteger(responseJson,'code');
+        result.message := getJSonString(responseJson,'message');
 end;
 
 function TEasyFinBankService.UpdateBankAccount(CorpNum : String; BankInfo : TEasyFinBankAccountForm; UserID : String = '') : TResponse;
@@ -434,43 +348,21 @@ var
         responseJson : string;
         uri : string;
 begin
-        try
-                requestJson := '{';
-                requestJson := requestJson + '"AccountPWD":"'+EscapeString(BankInfo.AccountPWD)+'",';
-                requestJson := requestJson + '"AccountName":"'+EscapeString(BankInfo.AccountName)+'",';
-                requestJson := requestJson + '"BankID":"'+EscapeString(BankInfo.BankID)+'",';
-                requestJson := requestJson + '"FastID":"'+EscapeString(BankInfo.FastID)+'",';
-                requestJson := requestJson + '"FastPWD":"'+EscapeString(BankInfo.FastPWD)+'",';
-                requestJson := requestJson + '"Memo":"'+EscapeString(BankInfo.Memo)+'"';
-                requestJson := requestJson + '}';
+        requestJson := '{';
+        requestJson := requestJson + '"AccountPWD":"'+EscapeString(BankInfo.AccountPWD)+'",';
+        requestJson := requestJson + '"AccountName":"'+EscapeString(BankInfo.AccountName)+'",';
+        requestJson := requestJson + '"BankID":"'+EscapeString(BankInfo.BankID)+'",';
+        requestJson := requestJson + '"FastID":"'+EscapeString(BankInfo.FastID)+'",';
+        requestJson := requestJson + '"FastPWD":"'+EscapeString(BankInfo.FastPWD)+'",';
+        requestJson := requestJson + '"Memo":"'+EscapeString(BankInfo.Memo)+'"';
+        requestJson := requestJson + '}';
 
-                uri := '/EasyFin/Bank/BankAccount/'+BankInfo.BankCode+'/'+BankInfo.AccountNumber+'/Update';
+        uri := '/EasyFin/Bank/BankAccount/'+BankInfo.BankCode+'/'+BankInfo.AccountNumber+'/Update';
 
-                responseJson := httppost(uri, CorpNum, UserID, requestJson);
+        responseJson := httppost(uri, CorpNum, UserID, requestJson);
 
-                if LastErrCode <> 0 then
-                begin
-                        result.code := LastErrCode;
-                        result.message := LastErrMessage;
-                end
-                else
-                begin
-                        result.code := getJSonInteger(responseJson,'code');
-                        result.message := getJSonString(responseJson,'message');
-                end;
-        except
-                on le : EPopbillException do begin
-                        if FIsThrowException then
-                        begin
-                                raise EPopbillException.Create(le.code,le.Message);
-                        end
-                        else
-                        begin
-                                result.code := le.code;
-                                result.Message := le.Message;
-                        end;
-                end;
-        end;
+        result.code := getJSonInteger(responseJson,'code');
+        result.message := getJSonString(responseJson,'message');
 end;
 
 function TEasyFinBankService.GetChargeInfo (CorpNum : string) : TEasyFinBankChargeInfo;
@@ -485,46 +377,15 @@ var
         responseJson : String;
 begin
 
-        try
-                responseJson := httpget('/EasyFin/Bank/ChargeInfo',CorpNum,UserID);
-        except
-                on le : EPopbillException do begin
-                        if FIsThrowException then
-                        begin
-                                raise EPopbillException.Create(le.code,le.message);
-                                exit;
-                        end;
-                end;
-        end;
+        responseJson := httpget('/EasyFin/Bank/ChargeInfo',CorpNum,UserID);
 
-        if LastErrCode <> 0 then
-        begin
-                result := TEasyFinBankChargeInfo.Create();
-                exit;
-        end
-        else
-        begin        
-                try
-                        result := TEasyFinBankChargeInfo.Create;
-                        result.unitCost := getJSonString(responseJson, 'unitCost');
-                        result.chargeMethod := getJSonString(responseJson, 'chargeMethod');
-                        result.rateSystem := getJSonString(responseJson, 'rateSystem');
-                except
-                        on E:Exception do begin
-                                if FIsThrowException then
-                                begin
-                                        raise EPopbillException.Create(-99999999,'결과처리 실패.[Malformed Json]');
-                                        exit;
-                                end
-                                else
-                                begin
-                                        result := TEasyFinBankChargeInfo.Create();
-                                        setLastErrCode(-99999999);
-                                        setLastErrMessage('결과처리 실패.[Malformed Json]');
-                                        exit;
-                                end;
-                        end;
-                end;
+        try
+                result := TEasyFinBankChargeInfo.Create;
+                result.unitCost := getJSonString(responseJson, 'unitCost');
+                result.chargeMethod := getJSonString(responseJson, 'chargeMethod');
+                result.rateSystem := getJSonString(responseJson, 'rateSystem');
+        except on E:Exception do
+                raise EPopbillException.Create(-99999999,'결과처리 실패.[Malformed Json]');
         end;
 end;
 
@@ -533,72 +394,30 @@ function TEasyFinBankService.GetFlatRatePopUpURL(CorpNum: string; UserID : Strin
 var
         responseJson : String;
 begin
-
-        try
-                responseJson := httpget('/EasyFin/Bank?TG=CHRG', CorpNum, UserID);
-                result := getJSonString(responseJson,'url');
-        except
-                on le : EPopbillException do begin
-                        if FIsThrowException then
-                        begin
-                                raise EPopbillException.Create(le.code, le.message);
-                                exit;
-                        end;
-                end;
-        end;
+        responseJson := httpget('/EasyFin/Bank?TG=CHRG', CorpNum, UserID);
+        result := getJSonString(responseJson,'url');
 end;
 
 function TEasyFinBankService.GetFlatRateState (CorpNum : string; BankCode : string; AccountNumber : string; UserID: string) : TEasyFinBankFlatRate;
 var
         responseJson : String;
 begin
-        try
-                responseJson := httpget('/EasyFin/Bank/Contract/'+BankCode+'/'+AccountNumber,CorpNum, UserID);
-        except
-                on le : EPopbillException do begin
-                        if FIsThrowException then
-                        begin
-                                raise EPopbillException.Create(le.code,le.message);
-                                exit;
-                        end;
-                end;                
-        end;
-        
-        if LastErrCode <> 0 then
-        begin
-                result := TEasyFinBankFlatRate.Create;
-                exit;
-        end
-        else
-        begin
-                try
-                        result := TEasyFinBankFlatRate.Create;
-                        result.referenceID := getJSonString(responseJson, 'referenceID');
-                        result.contractDT := getJSonString(responseJson, 'contractDT');
-                        result.baseDate := getJsonInteger(responseJson, 'baseDate');
-                        result.useEndDate := getJSonString(responseJson, 'useEndDate');
-                        result.state := getJsonInteger(responseJson, 'state');
-                        result.closeRequestYN := getJsonBoolean(responseJson, 'closeRequestYN');
-                        result.useRestrictYN := getJsonBoolean(responseJson, 'useRestrictYN');
-                        result.closeOnExpired := getJsonBoolean(responseJson, 'closeOnExpired');
-                        result.unPaidYN := getJsonBoolean(responseJson, 'unPaidYN');
-                except
-                        on E:Exception do begin
-                                if FIsThrowException then
-                                begin
-                                        raise EPopbillException.Create(-99999999,'결과처리 실패.[Malformed Json]');
-                                        exit;
-                                end
-                                else
-                                begin
-                                        result := TEasyFinBankFlatRate.Create;
-                                        setLastErrCode(-99999999);
-                                        setLastErrMessage('결과처리 실패.[Malformed Json]');
-                                end;
-                        end;
-                end;
-        end;
+        responseJson := httpget('/EasyFin/Bank/Contract/'+BankCode+'/'+AccountNumber,CorpNum, UserID);
 
+        try
+                result := TEasyFinBankFlatRate.Create;
+                result.referenceID := getJSonString(responseJson, 'referenceID');
+                result.contractDT := getJSonString(responseJson, 'contractDT');
+                result.baseDate := getJsonInteger(responseJson, 'baseDate');
+                result.useEndDate := getJSonString(responseJson, 'useEndDate');
+                result.state := getJsonInteger(responseJson, 'state');
+                result.closeRequestYN := getJsonBoolean(responseJson, 'closeRequestYN');
+                result.useRestrictYN := getJsonBoolean(responseJson, 'useRestrictYN');
+                result.closeOnExpired := getJsonBoolean(responseJson, 'closeOnExpired');
+                result.unPaidYN := getJsonBoolean(responseJson, 'unPaidYN');
+        except on E:Exception do
+                raise EPopbillException.Create(-99999999,'결과처리 실패.[Malformed Json]');
+        end;
 end;
 
 
@@ -607,18 +426,9 @@ var
         responseJson : String;
 begin
 
-        try
-                responseJson := httpget('/EasyFin/Bank?TG=BankAccount', CorpNum, UserID);
-                result := getJSonString(responseJson,'url');
-        except
-                on le : EPopbillException do begin
-                        if FIsThrowException then
-                        begin
-                                raise EPopbillException.Create(le.code, le.message);
-                                exit;
-                        end;
-                end;
-        end;
+        responseJson := httpget('/EasyFin/Bank?TG=BankAccount', CorpNum, UserID);
+        result := getJSonString(responseJson,'url');
+
 end;
 
 function TEasyFinBankService.jsonToTEasyFinBankAccountInfo(json : String) : TEasyFinBankAccountInfo;
@@ -665,69 +475,18 @@ var
         i : Integer;
 begin
 
+        responseJson := httpget('/EasyFin/Bank/ListBankAccount', CorpNum, UserID);
+
         try
-                responseJson := httpget('/EasyFin/Bank/ListBankAccount', CorpNum, UserID);
-        except
-                on le : EPopbillException do begin
-                        if FIsThrowException then
-                        begin
-                                raise EPopbillException.Create(le.code,le.message);
-                                exit;
-                        end
-                        else
-                        begin
-                                setLength(result,0);
-                                exit;
-                        end;
-                end;
-        end;
+               jSons := ParseJsonList(responseJson);
+               SetLength(result,Length(jSons));
 
-        if responseJson = '[]' then
-        begin
-                if FIsThrowException then
-                begin
-                        raise EPopbillException.Create(-99999999, '등록된 계좌 정보가 존재하지 않습니다.');
-                        exit;
-                end
-                else
-                begin
-                        setLength(result,0);
-                        setLastErrCode(-99999999);
-                        setLastErrMessage('등록된 계좌 정보가 존재하지 않습니다.');
-                        exit;
-                end;
-        end;
-
-        if LastErrCode <> 0 then
-        begin
-                exit;
-        end
-        else
-        begin
-                try
-                        jSons := ParseJsonList(responseJson);
-                        SetLength(result,Length(jSons));
-
-                        for i:= 0 to Length(jSons) -1 do
-                        begin
-                                result[i] := jsonToTEasyFinBankAccountInfo(jSons[i]);
-                        end;
-                except
-                        on E:Exception do begin
-                                if FIsThrowException then
-                                begin
-                                        raise EPopbillException.Create(-99999999,'결과처리 실패.[Malformed Json]');
-                                        exit;
-                                end
-                                else
-                                begin
-                                        setLength(result,0);
-                                        setLastErrCode(-99999999);
-                                        setLastErrMessage('결과처리 실패.[Malformed Json]');
-                                        exit;
-                                end;
-                        end;
-                end;
+               for i:= 0 to Length(jSons) -1 do
+               begin
+                       result[i] := jsonToTEasyFinBankAccountInfo(jSons[i]);
+               end;
+        except on E:Exception do
+               raise EPopbillException.Create(-99999999,'결과처리 실패.[Malformed Json]');
         end;
 end;
 
@@ -736,33 +495,9 @@ var
         responseJson : string;
 
 begin
-        try        
-                responseJson := httppost('/EasyFin/Bank/BankAccount?BankCode='+BankCode+'&&AccountNumber='+AccountNumber+'&&SDate='+SDate+'&&EDate='+EDate, CorpNum, UserID, '', '');
-        except
-                on le : EPopbillException do begin
-                        if FIsThrowException then
-                        begin
-                                raise EPopbillException.Create(le.code, le.message);
-                                exit;
-                        end
-                        else
-                        begin
-                                result := '';
-                                exit;
-                        end;
-                end;
-        end;
+        responseJson := httppost('/EasyFin/Bank/BankAccount?BankCode='+BankCode+'&&AccountNumber='+AccountNumber+'&&SDate='+SDate+'&&EDate='+EDate, CorpNum, UserID, '', '');
 
-        if LastErrCode <> 0 then
-        begin
-                result := '';
-                exit;
-        end
-        else
-        begin
-                result := getJsonString(responseJson, 'jobID');
-                exit;
-        end;
+        result := getJsonString(responseJson, 'jobID');
 end;
 
 function TEasyFinBankService.jsonToTEasyFinBankJobInfo(json : String) : TEasyFinBankJobInfo;
@@ -788,41 +523,13 @@ var
 begin
         if Not ( length ( jobID ) = 18 ) then
         begin
-                if FIsThrowException then
-                begin
-                        raise EPopbillException.Create(-99999999, '작업아이디(jobID)가 올바르지 않습니다.');
-                        Exit;
-                end
-                else
-                begin
-                        result := TEasyFinBankJobInfo.Create;
-                        setLastErrCode(-99999999);
-                        setLastErrMessage('작업아이디(jobID)가 올바르지 않습니다.');
-                        exit;
-                end;
+                raise EPopbillException.Create(-99999999,'작업아이디가 유효하지 않습니다.');
+                Exit;
         end;
 
-        try
-                responseJson := httpget('/EasyFin/Bank/'+ jobID + '/State', CorpNum, UserID);
-        except
-                on le : EPopbillException do begin
-                        if FIsThrowException then
-                        begin
-                                raise EPopbillException.Create(le.code,le.message);
-                                exit;
-                        end;
-                end;
-        end;
+        responseJson := httpget('/EasyFin/Bank/'+ jobID + '/State', CorpNum, UserID);
 
-        if LastErrCode <> 0 then
-        begin
-                result := TEasyFinBankJobInfo.Create;
-                exit;
-        end
-        else
-        begin
-                result := jsonToTEasyFinBankJobInfo ( responseJson ) ;
-        end;
+        result := jsonToTEasyFinBankJobInfo ( responseJson ) ;
 end;
 
 function TEasyFinBankService.ListActiveJob (CorpNum : string; UserID:string) : TEasyFinBankJobInfoList;
@@ -832,69 +539,18 @@ var
         i : Integer;
 begin
 
+        responseJson := httpget('/EasyFin/Bank/JobList', CorpNum, UserID);
+
         try
-                responseJson := httpget('/EasyFin/Bank/JobList', CorpNum, UserID);
-        except
-                on le : EPopbillException do begin
-                        if FIsThrowException then
-                        begin
-                                raise EPopbillException.Create(le.code,le.message);
-                                exit;
-                        end
-                        else
-                        begin
-                                setLength(result,0);
-                                exit;
-                        end;
-                end;
-        end;
+                jSons := ParseJsonList(responseJson);
+                SetLength(result,Length(jSons));
 
-        if responseJson = '[]' then
-        begin
-                if FIsThrowException then
+                for i:= 0 to Length(jSons) -1 do
                 begin
-                        raise EPopbillException.Create(-99999999, '작업 요청건이 존재하지 않습니다.');
-                        exit;
-                end
-                else
-                begin
-                        setLength(result,0);
-                        setLastErrCode(-99999999);
-                        setLastErrMessage('작업 요청건이 존재하지 않습니다.');
-                        exit;
+                        result[i] := jsonToTEasyFinBankJobInfo(jSons[i]);
                 end;
-        end;
-
-        if LastErrCode <> 0 then
-        begin
-                exit;
-        end
-        else
-        begin
-                try
-                        jSons := ParseJsonList(responseJson);
-                        SetLength(result,Length(jSons));
-
-                        for i:= 0 to Length(jSons) -1 do
-                        begin
-                                result[i] := jsonToTEasyFinBankJobInfo(jSons[i]);
-                        end;
-                except
-                        on E:Exception do begin
-                                if FIsThrowException then
-                                begin
-                                        raise EPopbillException.Create(-99999999,'결과처리 실패.[Malformed Json]');
-                                        exit;
-                                end
-                                else
-                                begin
-                                        setLength(result,0);
-                                        setLastErrCode(-99999999);
-                                        setLastErrMessage('결과처리 실패.[Malformed Json]');
-                                        exit;
-                                end;
-                        end;
-                end;
+        except on E:Exception do
+                raise EPopbillException.Create(-99999999,'결과처리 실패.[Malformed Json]');
         end;
 end;
 
@@ -911,20 +567,10 @@ var
 begin
         if Not ( length ( jobID ) = 18 ) then
         begin
-                if FIsThrowException then
-                begin
-                        raise EPopbillException.Create(-99999999, '작업아이디(jobID)가 올바르지 않습니다.');
-                        Exit;
-                end
-                else
-                begin
-                        result := TEasyFinBankSearchResult.Create;
-                        result.code := -99999999;
-                        result.message := '작업아이디(jobID)가 올바르지 않습니다.';
-                        exit;
-                end;
-
+                raise EPopbillException.Create(-99999999,'작업아이디가 유효하지 않습니다.');
+                Exit;
         end;
+
 
         for i := 0 to High ( TradeType ) do
         begin
@@ -950,83 +596,44 @@ begin
         uri := uri + '&&Page=' + IntToStr(Page) + '&&PerPage='+ IntToStr(PerPage);
         uri := uri + '&&Order=' + order;
 
-        try
-                responseJson := httpget(uri, CorpNum, UserID);
-        except
-                on le : EPopbillException do begin
-                        if FIsThrowException then
-                        begin
-                                raise EPopbillException.Create(le.code, le.message);
-                                exit;
-                        end
-                        else
-                        begin
-                                result := TEasyFinBankSearchResult.Create;
-                                result.code := le.code;
-                                result.message := le.message;
-                                exit;
-                        end;
-                end;
-        end;
 
-        if LastErrCode <> 0 then
-        begin
-                result := TEasyFinBankSearchResult.Create;
-                result.code := LastErrCode;
-                result.message := LastErrMessage;
-                exit;
-        end
-        else
-        begin
+        responseJson := httpget(uri, CorpNum, UserID);
+
+
         
-                result := TEasyFinBankSearchResult.Create;
+        result := TEasyFinBankSearchResult.Create;
 
-                result.code := getJSonInteger(responseJson, 'code');
-                result.total := getJSonInteger(responseJson, 'total');
-                result.perPage := getJSonInteger(responseJson, 'perPage');
-                result.pageNum := getJSonInteger(responseJson, 'pageNum');
-                result.pageCount := getJSonInteger(responseJson, 'pageCount');
-                result.message := getJSonString(responseJson, 'message');
-                result.lastScrapDT := getJSonString(responseJson, 'lastScrapDT');
+        result.code := getJSonInteger(responseJson, 'code');
+        result.total := getJSonInteger(responseJson, 'total');
+        result.perPage := getJSonInteger(responseJson, 'perPage');
+        result.pageNum := getJSonInteger(responseJson, 'pageNum');
+        result.pageCount := getJSonInteger(responseJson, 'pageCount');
+        result.message := getJSonString(responseJson, 'message');
+        result.lastScrapDT := getJSonString(responseJson, 'lastScrapDT');
 
-                try
-                        jSons := getJsonList(responseJson, 'list');
-                        SetLength(result.list, Length(jSons));
-                        for i:=0 to Length(jSons)-1 do
-                        begin
-                                result.list[i] := TEasyFinBankSearchDetail.Create;
-                                result.list[i].tid := getJsonString (jSons[i], 'tid');
-                                result.list[i].trdt := getJsonString (jSons[i], 'trdt');
-                                result.list[i].trdate := getJsonString (jSons[i], 'trdate');
-                                result.list[i].trserial := getJsonInteger (jSons[i], 'trserial');
-                                result.list[i].accIn := getJsonString (jSons[i], 'accIn');
-                                result.list[i].accOut := getJsonString (jSons[i], 'accOut');
-                                result.list[i].balance := getJsonString (jSons[i], 'balance');
-                                result.list[i].remark1 := getJsonString (jSons[i], 'remark1');
-                                result.list[i].remark2 := getJsonString (jSons[i], 'remark2');
-                                result.list[i].remark3 := getJsonString (jSons[i], 'remark3');
-                                result.list[i].remark4 := getJsonString (jSons[i], 'remark4');
-                                result.list[i].regDT := getJsonString (jSons[i], 'regDT');
-                                result.list[i].memo := getJsonString (jSons[i], 'memo');
-                        end;
-
-                except
-                        on E:Exception do begin
-                                if FIsThrowException then
-                                begin
-                                        raise EPopbillException.Create(-99999999,'결과처리 실패.[Malformed Json]');
-                                        exit;
-                                end
-                                else
-                                begin
-                                        result := TEasyFinBankSearchResult.Create;
-                                        result.code := -99999999;
-                                        result.message := '결과처리 실패.[Malformed Json]';
-                                        exit;
-                                end;
-
-                        end;
+        try
+                jSons := getJsonList(responseJson, 'list');
+                SetLength(result.list, Length(jSons));
+                for i:=0 to Length(jSons)-1 do
+                begin
+                        result.list[i] := TEasyFinBankSearchDetail.Create;
+                        result.list[i].tid := getJsonString (jSons[i], 'tid');
+                        result.list[i].trdt := getJsonString (jSons[i], 'trdt');
+                        result.list[i].trdate := getJsonString (jSons[i], 'trdate');
+                        result.list[i].trserial := getJsonInteger (jSons[i], 'trserial');
+                        result.list[i].accIn := getJsonString (jSons[i], 'accIn');
+                        result.list[i].accOut := getJsonString (jSons[i], 'accOut');
+                        result.list[i].balance := getJsonString (jSons[i], 'balance');
+                        result.list[i].remark1 := getJsonString (jSons[i], 'remark1');
+                        result.list[i].remark2 := getJsonString (jSons[i], 'remark2');
+                        result.list[i].remark3 := getJsonString (jSons[i], 'remark3');
+                        result.list[i].remark4 := getJsonString (jSons[i], 'remark4');
+                        result.list[i].regDT := getJsonString (jSons[i], 'regDT');
+                        result.list[i].memo := getJsonString (jSons[i], 'memo');
                 end;
+
+        except on E:Exception do
+                raise EPopbillException.Create(-99999999,'결과처리 실패.[Malformed Json]');
         end;
 end;
 
@@ -1040,19 +647,8 @@ var
 begin
         if Not ( length ( jobID ) = 18 ) then
         begin
-                if FIsThrowException then
-                begin
-                        raise EPopbillException.Create(-99999999, '작업아이디(jobID)가 올바르지 않습니다.');
-                        Exit;
-                end
-                else
-                begin
-                        result := TEasyFinBankSummary.Create;
-                        setLastErrCode(-99999999);
-                        setLastErrMessage('작업아이디(jobID)가 올바르지 않습니다.');
-                        exit;
-                end;
-
+                raise EPopbillException.Create(-99999999,'작업아이디가 유효하지 않습니다.');
+                Exit;
         end;
         
         for i := 0 to High ( TradeType ) do
@@ -1072,31 +668,17 @@ begin
                 uri := uri + '&&SearchString='+ UrlEncodeUTF8(SearchString);
         end;
 
-        try
-                responseJson := httpget(uri, CorpNum, UserID);
-        except
-                on le : EPopbillException do begin
-                        if FIsThrowException then
-                        begin
-                                raise EPopbillException.Create(le.code,le.message);
-                                exit;
-                        end;
-                end;                
-        end;
+        responseJson := httpget(uri, CorpNum, UserID);
 
-        if LastErrCode <> 0 then
-        begin
-                result := TEasyFinBankSummary.Create;
-                exit;
-        end
-        else
-        begin        
+        try
                 result := TEasyFinBankSummary.Create;
                 result.count := GetJSonInteger(responseJson, 'count');
                 result.cntAccIn := GetJSonInteger(responseJson, 'cntAccIn');
                 result.cntAccOut := GetJSonInteger(responseJson, 'cntAccOut');
                 result.totalAccIn := GetJSonInteger(responseJson, 'totalAccIn');
-                result.totalAccOut := GetJSonInteger(responseJson, 'totalAccOut');                
+                result.totalAccOut := GetJSonInteger(responseJson, 'totalAccOut');
+        except on E:Exception do
+                raise EPopbillException.Create(-99999999,'결과처리 실패.[Malformed Json]');
         end;
 end;
 
@@ -1106,46 +688,14 @@ var
 begin
         if Not ( length ( TID ) = 32 ) then
         begin
-                if FIsThrowException then
-                begin
-                        raise EPopbillException.Create(-99999999, '거래내역 아이디가 올바르지 않습니다.');
-                        Exit;
-                end
-                else
-                begin
-                        setLastErrCode(-99999999);
-                        setLastErrMessage('거래내역 아이디가 올바르지 않습니다.');
-                        exit;
-                end;
-
+                raise EPopbillException.Create(-99999999,'거래내역 아이디가 유효하지 않습니다.');
+                Exit;
         end;
 
-        
-        try
-                responseJson := httppost('/EasyFin/Bank/SaveMemo?TID='+TID+'&&Memo='+UrlEncodeUTF8(Memo), CorpNum, UserID, '', '');
-        except
-                on le : EPopbillException do begin
-                        if FIsThrowException then
-                        begin
-                                raise EPopbillException.Create(le.code,le.Message);
-                        end;
-                        
-                        result.code := le.code;
-                        result.message := le.Message;
-                end;
-        end;
-        
-        if LastErrCode <> 0 then
-        begin
-                result.code := LastErrCode;
-                result.message := LastErrMessage;
-                exit;
-        end
-        else
-        begin
-                result.code := getJSonInteger(responseJson,'code');
-                result.message := getJSonString(responseJson,'message');
-        end;
+        responseJson := httppost('/EasyFin/Bank/SaveMemo?TID='+TID+'&&Memo='+UrlEncodeUTF8(Memo), CorpNum, UserID, '', '');
+
+        result.code := getJSonInteger(responseJson,'code');
+        result.message := getJSonString(responseJson,'message');
 
 end;
 end.
