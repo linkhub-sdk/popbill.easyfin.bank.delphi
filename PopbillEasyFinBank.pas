@@ -541,6 +541,11 @@ begin
 
         responseJson := httpget('/EasyFin/Bank/JobList', CorpNum, UserID);
 
+        if responseJson ='[]' then
+        begin
+                raise EPopbillException.Create(-99999999, '작업 요청건이 존재하지 않습니다.');
+                exit;
+        end;
         try
                 jSons := ParseJsonList(responseJson);
                 SetLength(result,Length(jSons));
